@@ -1,18 +1,22 @@
-// src/app/Dropzone.js
-"use client"; // Ensure it's treated as a client-side component
+// src/app/components/Dropzone.js
+"use client"; // Ensure this is a client component
 
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Button, VStack } from "@chakra-ui/react";
 
-export default function Dropzone() {
-  // Define file types you're allowing
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-    // Handle file upload or processing here
-  }, []);
+export default function Dropzone({ onFileAccepted }) {
+  const [file, setFile] = useState(null);
 
-  // Set up dropzone options for accepted file types
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const selectedFile = acceptedFiles[0];
+      setFile(selectedFile);
+      onFileAccepted(selectedFile); // Pass the file to the parent component
+    },
+    [onFileAccepted]
+  );
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -27,8 +31,8 @@ export default function Dropzone() {
   return (
     <Box
       {...getRootProps()}
+      width="100%"
       height="300px"
-      opacity={isDragActive ? 0.3 : 0.5}
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -48,7 +52,9 @@ export default function Dropzone() {
         </Text>
       ) : (
         <Text fontSize="lg" color="gray.600">
-          Drag & drop a PDF, PNG, DOCX, or JPEG here, or click to select files
+          {file
+            ? `Selected file: ${file.name}`
+            : "Drag & drop a PDF, PNG, DOCX, or JPEG here"}
         </Text>
       )}
     </Box>

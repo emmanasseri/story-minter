@@ -2,6 +2,7 @@
 "use client";
 
 import { ChakraProvider } from "@chakra-ui/react";
+import Web3Providers from "./Web3Providers";
 import theme from "./theme";
 
 export default function Layout({ children }) {
@@ -21,7 +22,7 @@ export default function Layout({ children }) {
       </head>
       <body>
         <ChakraProvider theme={theme}>
-          <main>{children}</main>
+          <Web3Providers>{children}</Web3Providers>
         </ChakraProvider>
       </body>
     </html>
